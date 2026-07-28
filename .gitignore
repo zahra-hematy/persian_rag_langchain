@@ -4,3 +4,21 @@
 
 # LangGraph
 .langgraph_api/
+venv
+venv/
+.ven*
+.env
+.vscode/
+.vscode/*
+src\__pycache__
+
+# Python cache
+__pycache__/
+*.py[cod]
+
+# Virtual environment
+venv/
+
+# VS Code
+.vscode/
+
