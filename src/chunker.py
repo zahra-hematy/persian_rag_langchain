@@ -7,11 +7,7 @@ class TextChunker:
     preserving metadata.
     """
 
-    def __init__(
-        self,
-        chunk_size=500,
-        chunk_overlap=100
-    ):
+    def __init__(self, chunk_size=500, chunk_overlap=100):
 
         self.splitter = RecursiveCharacterTextSplitter(
 
@@ -29,10 +25,7 @@ class TextChunker:
             ]
         )
 
-    def chunk(
-        self,
-        documents: List[Document]
-        ) -> List[Document]:
+    def chunk(self, documents: List[Document]) -> List[Document]:
 
         return self.splitter.split_documents(
             documents

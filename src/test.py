@@ -21,3 +21,9 @@ cq =ch.chunk([l1[0]])
 print ("------------------")
 
 print(cq)
+
+from embedding import EmbeddingModel
+embedder = EmbeddingModel()
+
+embedding_model = embedder.get_embeddings()
+print(embedding_model)

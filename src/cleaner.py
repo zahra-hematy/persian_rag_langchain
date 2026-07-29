@@ -8,10 +8,7 @@ class TextCleaner:
     Cleans LangChain Document objects while preserving metadata.
     """
 
-    def clean(
-        self,
-        documents: list[Document]
-    ) -> list[Document]:
+    def clean(self, documents: list[Document]) -> list[Document]:
 
         cleaned_documents = []
 
