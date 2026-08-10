@@ -1,5 +1,5 @@
 from langchain_text_splitters import RecursiveCharacterTextSplitter
-
+from langchain_core.documents import Document
 
 class TextChunker:
     """
@@ -7,7 +7,7 @@ class TextChunker:
     preserving metadata.
     """
 
-    def __init__(self, chunk_size=500, chunk_overlap=100):
+    def __init__(self, chunk_size=800, chunk_overlap=200):
 
         self.splitter = RecursiveCharacterTextSplitter(
 
@@ -17,15 +17,18 @@ class TextChunker:
 
             separators=[
                 "\n\n",
-                "\n",
                 "؟",
                 "!",
                 ".",
+                "،",
+                "\n",
                 " "
             ]
         )
 
-    def chunk(self, documents: List[Document]) -> List[Document]:
+    def chunk(
+            self, 
+            documents: list[Document]) -> list[Document]:
 
         return self.splitter.split_documents(
             documents
