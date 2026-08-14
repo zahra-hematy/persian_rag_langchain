@@ -51,7 +51,6 @@ class RAGChain:
                 "input": question
             }
         )
-
         chunks = []
 
         for doc in response["context"]:
@@ -60,8 +59,16 @@ class RAGChain:
                 {
                     "text": doc.page_content,
                     "page": doc.metadata["page"],
-                    "source": doc.metadata["source"]
+                    "source": doc.metadata["source"],
+                    "semantic_score": doc.metadata.get(
+                        "semantic_score"
+                    ),
+                    "bm25_score": doc.metadata.get(
+                        "bm25_score"
+                    ),
+                    "hybrid_score": doc.metadata.get(
+                        "hybrid_score"
+                    )
                 }
             )
-
         return response["answer"], chunks
