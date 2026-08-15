@@ -3,7 +3,6 @@ from langchain.chains import create_retrieval_chain
 from langchain.chains.combine_documents import (
     create_stuff_documents_chain
 )
-
 from langchain_core.prompts import ChatPromptTemplate
 
 
@@ -51,6 +50,20 @@ class RAGChain:
                 "input": question
             }
         )
+        answer = response["answer"]
+
+        # ----------------------------------
+        # Check whether the answer exists
+        # ----------------------------------
+
+        no_answer_text = "اطلاعات کافی در اسناد موجود نیست."
+
+        has_answer = (no_answer_text not in answer.strip())
+
+        # ----------------------------------
+        # Retrieved chunks
+        # ----------------------------------
+
         chunks = []
 
         for doc in response["context"]:
@@ -60,15 +73,9 @@ class RAGChain:
                     "text": doc.page_content,
                     "page": doc.metadata["page"],
                     "source": doc.metadata["source"],
-                    "semantic_score": doc.metadata.get(
-                        "semantic_score"
-                    ),
-                    "bm25_score": doc.metadata.get(
-                        "bm25_score"
-                    ),
-                    "hybrid_score": doc.metadata.get(
-                        "hybrid_score"
-                    )
+                    "semantic_score": doc.metadata.get("semantic_score"),
+                    "bm25_score": doc.metadata.get("bm25_score"),
+                    "hybrid_score": doc.metadata.get("hybrid_score")
                 }
             )
-        return response["answer"], chunks
+        return response["answer"], chunks, has_answer

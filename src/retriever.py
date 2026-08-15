@@ -1,8 +1,6 @@
 from langchain_core.retrievers import BaseRetriever
 from langchain_core.documents import Document
-
 from rank_bm25 import BM25Okapi
-
 from typing import List
 import re
 
@@ -18,22 +16,17 @@ class HybridRetriever(BaseRetriever):
     """
 
     vector_store: object
-
     k: int = 6
     final_k: int = 5
-
     semantic_weight: float = 0.6
     keyword_weight: float = 0.4
-
     documents: List[Document] = []
 
     bm25: object = None
 
     def model_post_init(self, __context):
 
-        documents = list(
-            self.vector_store.docstore._dict.values()
-        )
+        documents = list(self.vector_store.docstore._dict.values())
 
         self.documents = documents
 
@@ -42,27 +35,18 @@ class HybridRetriever(BaseRetriever):
             for doc in documents
         ]
 
-        self.bm25 = BM25Okapi(
-            tokenized_documents
-        )
+        self.bm25 = BM25Okapi(tokenized_documents)
 
     @staticmethod
     def _tokenize(text: str):
 
         text = text.lower()
 
-        text = re.sub(
-            r"[^\w\u0600-\u06FF\-]+",
-            " ",
-            text
-        )
+        text = re.sub(r"[^\w\u0600-\u06FF\-]+", " ", text)
 
         return text.split()
 
-    def _get_relevant_documents(
-        self,
-        query: str
-    ) -> List[Document]:
+    def _get_relevant_documents(self, query: str) -> List[Document]:
 
         # =====================================
         # 1. FAISS
@@ -93,9 +77,7 @@ class HybridRetriever(BaseRetriever):
 
         query_tokens = self._tokenize(query)
 
-        bm25_raw_scores = self.bm25.get_scores(
-            query_tokens
-        )
+        bm25_raw_scores = self.bm25.get_scores(query_tokens)
 
         bm25_ranked = sorted(
             enumerate(bm25_raw_scores),
@@ -122,13 +104,9 @@ class HybridRetriever(BaseRetriever):
 
         candidate_ids = set()
 
-        candidate_ids.update(
-            faiss_scores.keys()
-        )
+        candidate_ids.update(faiss_scores.keys())
 
-        candidate_ids.update(
-            bm25_scores.keys()
-        )
+        candidate_ids.update(bm25_scores.keys())
 
         # =====================================
         # 4. Normalize FAISS
@@ -187,13 +165,9 @@ class HybridRetriever(BaseRetriever):
 
             if doc_id in faiss_scores:
 
-                document = (
-                    faiss_scores[doc_id]["document"]
-                )
+                document = (faiss_scores[doc_id]["document"])
 
-                semantic_score = (
-                    faiss_scores[doc_id]["score"]
-                )
+                semantic_score = (faiss_scores[doc_id]["score"])
 
                 if faiss_max != faiss_min:
 
@@ -217,13 +191,9 @@ class HybridRetriever(BaseRetriever):
 
             if doc_id in bm25_scores:
 
-                document = (
-                    bm25_scores[doc_id]["document"]
-                )
+                document = (bm25_scores[doc_id]["document"])
 
-                keyword_score = (
-                    bm25_scores[doc_id]["score"]
-                )
+                keyword_score = (bm25_scores[doc_id]["score"])
 
                 if bm25_max != bm25_min:
 
@@ -249,9 +219,7 @@ class HybridRetriever(BaseRetriever):
 
                 self.semantic_weight
                 * semantic_normalized
-
                 +
-
                 self.keyword_weight
                 * keyword_normalized
             )
@@ -260,25 +228,15 @@ class HybridRetriever(BaseRetriever):
             # Store metadata
             # -----------------------------
 
-            document.metadata[
-                "semantic_score"
-            ] = semantic_score
+            document.metadata["semantic_score"] = semantic_score
 
-            document.metadata[
-                "bm25_score"
-            ] = keyword_score
+            document.metadata["bm25_score"] = keyword_score
 
-            document.metadata[
-                "hybrid_score"
-            ] = float(hybrid_score)
+            document.metadata["hybrid_score"] = float(hybrid_score)
 
-            document.metadata[
-                "semantic_weight"
-            ] = self.semantic_weight
+            document.metadata["semantic_weight"] = self.semantic_weight
 
-            document.metadata[
-                "keyword_weight"
-            ] = self.keyword_weight
+            document.metadata["keyword_weight"] = self.keyword_weight
 
             ranked_documents.append(
                 (

@@ -26,9 +26,7 @@ class TextChunker:
             ]
         )
 
-    def chunk(
-            self, 
-            documents: list[Document]) -> list[Document]:
+    def chunk(self, documents: list[Document]) -> list[Document]:
 
         return self.splitter.split_documents(
             documents

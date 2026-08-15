@@ -15,13 +15,9 @@ def main():
 
     loader = PDFLoader()
 
-    documents = loader.load(
-        "data"
-    )
+    documents = loader.load("data")
 
-    print(
-        f"Loaded {len(documents)} pages."
-    )
+    print(f"Loaded {len(documents)} pages.")
 
     # -----------------------------
     # Clean documents
@@ -29,9 +25,7 @@ def main():
 
     cleaner = TextCleaner()
 
-    documents = cleaner.clean(
-        documents
-    )
+    documents = cleaner.clean(documents)
 
     print("Documents cleaned.")
 
@@ -41,13 +35,9 @@ def main():
 
     chunker = TextChunker()
 
-    chunks = chunker.chunk(
-        documents
-    )
+    chunks = chunker.chunk(documents)
 
-    print(
-        f"Created {len(chunks)} chunks."
-    )
+    print(f"Created {len(chunks)} chunks.")
 
     # -----------------------------
     # Embedding model
@@ -70,9 +60,7 @@ def main():
     # Save index
     # -----------------------------
 
-    Path("indexes").mkdir(
-        exist_ok=True
-    )
+    Path("indexes").mkdir(exist_ok=True)
 
     VectorStore.save(
         vector_store,
@@ -81,9 +69,7 @@ def main():
 
     print("FAISS index saved.")
 
-    print(
-        f"Finished in {time.time() - start_time:.2f} seconds."
-    )
+    print(f"Finished in {time.time() - start_time:.2f} seconds.")
 
 
 if __name__ == "__main__":

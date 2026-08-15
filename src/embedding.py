@@ -8,9 +8,7 @@ class EmbeddingModel:
 
     def __init__(self, model_name="intfloat/multilingual-e5-small"):
 
-        self.model = HuggingFaceEmbeddings(
-            model_name=model_name
-        )
+        self.model = HuggingFaceEmbeddings(model_name=model_name)
 
     def get_embeddings(self):
 

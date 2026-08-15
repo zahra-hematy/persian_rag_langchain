@@ -9,9 +9,7 @@ from src.vector_store import VectorStore
 st.set_page_config(
 
     page_title="Persian RAG",
-
     page_icon="📄",
-
     layout="wide"
 )
 
@@ -63,65 +61,58 @@ generator = load_rag()
 st.title("📄 Persian RAG (LangChain)")
 
 question = st.text_input(
-
     "Question",
-
     placeholder="Ask a question..."
 )
 
 if st.button(
-
     "Ask",
-
     use_container_width=True
 ):
 
     if not question.strip():
 
         st.warning("Please enter a question.")
-
         st.stop()
 
     # with st.spinner("Searching..."):
-    answer, chunks = generator.generate(
-        question
-    )
-
+    answer, chunks, has_answer = generator.generate(question)
     st.write(answer)
-    with st.expander("Retrieved Chunks"):
 
-        for i, chunk in enumerate(chunks, start=1):
+    if has_answer:
 
-            st.markdown(
-                f"### Chunk {i}"
-            )
+        with st.expander("Retrieved Chunks"):
 
-            st.write(
-                f"**Hybrid Score:** "
-                f"`{chunk['hybrid_score']:.4f}`"
-            )
+            for i, chunk in enumerate(chunks, start=1):
 
-            if chunk["semantic_score"] is not None:
+                st.markdown(f"### Chunk {i}")
 
                 st.write(
-                    f"**FAISS L2:** "
-                    f"`{chunk['semantic_score']:.4f}`"
+                    f"**Hybrid Score:** "
+                    f"`{chunk['hybrid_score']:.4f}`"
                 )
 
-            if chunk["bm25_score"] is not None:
+                if chunk["semantic_score"] is not None:
 
-                st.write(
-                    f"**BM25:** "
-                    f"`{chunk['bm25_score']:.4f}`"
+                    st.write(
+                        f"**FAISS L2:** "
+                        f"`{chunk['semantic_score']:.4f}`"
+                    )
+
+                if chunk["bm25_score"] is not None:
+
+                    st.write(
+                        f"**BM25:** "
+                        f"`{chunk['bm25_score']:.4f}`"
+                    )
+
+                st.write(chunk["text"])
+
+                st.caption(
+                    f"Page: {chunk['page']} | "
+                    f"Source: {chunk['source']}"
                 )
 
-            st.write(
-                chunk["text"]
-            )
+                st.divider()
 
-            st.caption(
-                f"Page: {chunk['page']} | "
-                f"Source: {chunk['source']}"
-            )
-
-            st.divider()
+   

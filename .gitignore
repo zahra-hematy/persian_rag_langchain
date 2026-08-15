@@ -20,8 +20,10 @@ __pycache__/
 venv/
 
 #data
-data/
-data/*
+قابلیت های پاور.pdf
+data/قابلیت های پاور.pdf
+data\قابلیت های پاور.pdf
+indexes/*
 
 # VS Code
 .vscode/

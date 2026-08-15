@@ -9,23 +9,13 @@ class PDFLoader:
 
     def __init__(self):
 
-        self.tesseract_cmd = (
-            r"C:\Program Files\Tesseract-OCR\tesseract.exe"
-        )
+        self.tesseract_cmd = (r"C:\Program Files\Tesseract-OCR\tesseract.exe")
 
-        self.tessdata_dir = (
-            r"C:\PROGRA~1\Tesseract-OCR\tessdata"
-        )
+        self.tessdata_dir = (r"C:\PROGRA~1\Tesseract-OCR\tessdata")
 
-        # تنظیم مسیر Tesseract
-        pytesseract.pytesseract.tesseract_cmd = (
-            self.tesseract_cmd
-        )
+        pytesseract.pytesseract.tesseract_cmd = (self.tesseract_cmd)
 
-        # تنظیم مسیر tessdata
-        os.environ["TESSDATA_PREFIX"] = (
-            self.tessdata_dir
-        )
+        os.environ["TESSDATA_PREFIX"] = (self.tessdata_dir)
 
     def load(self, folder_path: str):
 
@@ -37,10 +27,7 @@ class PDFLoader:
 
         total_pdfs = len(pdf_files)
 
-        for pdf_index, pdf_file in enumerate(
-            pdf_files,
-            start=1
-        ):
+        for pdf_index, pdf_file in enumerate(pdf_files, start=1):
 
             print()
             print("=" * 70)
@@ -58,17 +45,12 @@ class PDFLoader:
             total_pages = len(doc)
             pages_to_process = total_pages - start_page
 
-            for page_number, page in enumerate(
-                doc,
-                start=0
-            ):
+            for page_number, page in enumerate(doc, start=0):
 
                 if page_number < start_page:
                     continue
 
-                current_page = (
-                    page_number - start_page + 1
-                )
+                current_page = (page_number - start_page + 1)
 
                 progress = (
                     current_page /
@@ -113,17 +95,13 @@ class PDFLoader:
                 )
 
             print()
-            print(
-                f"Completed: {pdf_file.name}"
-            )
+            print(f"Completed: {pdf_file.name}")
 
             doc.close()
 
         print()
         print("=" * 70)
-        print(
-            f"OCR completed: {len(documents)} pages"
-        )
+        print(f"OCR completed: {len(documents)} pages")
         print("=" * 70)
 
         return documents
